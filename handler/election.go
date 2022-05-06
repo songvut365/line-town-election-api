@@ -1,10 +1,12 @@
 package handler
 
 import (
+	"encoding/csv"
 	"fmt"
 	"line-town-election-api/database"
 	"line-town-election-api/model"
 	"net/http"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -96,6 +98,47 @@ func GetElectionResult(c *fiber.Ctx) error {
 }
 
 func GetExportResult(c *fiber.Ctx) error {
+	db := database.Database
+
+	// Get all votes
+	var votes []model.Vote
+
+	err := db.Find(&votes).Error
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Cannot find votes",
+		})
+	}
+
+	// Create csv file
+	file, err := os.Create("./public/export/result.csv")
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Cannot open csv file",
+		})
+	}
+	defer file.Close()
+
+	// Write votes to csv file
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	var data [][]string
+
+	title := []string{"Candidate id", "National id"}
+	data = append(data, title)
+
+	for _, vote := range votes {
+		candidateId := fmt.Sprintf("%v", vote.CandidateID)
+		nationalId := vote.NationalID
+
+		row := []string{candidateId, nationalId}
+		data = append(data, row)
+	}
+	writer.WriteAll(data)
+
 	// Success
 	return c.Download("./public/export/result.csv", "result.csv")
 }
