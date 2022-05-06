@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"line-town-election-api/model"
+	"os"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -14,7 +15,7 @@ var Database *gorm.DB
 func SetupDatabase() {
 	//Open Database
 	var err error
-	Database, err = gorm.Open(sqlite.Open("./database/election.db"), &gorm.Config{})
+	Database, err = gorm.Open(sqlite.Open(os.Getenv("DATABASE")), &gorm.Config{})
 	if err != nil {
 		panic("Failed to conenct database")
 	}

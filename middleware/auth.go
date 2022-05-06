@@ -2,13 +2,14 @@ package middleware
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func compareToken(authorization string) bool {
 	bearer := "Bearer "
-	return authorization == bearer+"xxxx"
+	return authorization == bearer+os.Getenv("EASY_TOKEN")
 }
 
 func Protected(c *fiber.Ctx) error {
