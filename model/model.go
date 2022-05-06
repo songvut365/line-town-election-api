@@ -11,13 +11,9 @@ type Candidate struct {
 }
 
 type Vote struct {
-	ID          uint `json:"id" gorm:"primary_key; not null; auto_increment"`
-	NationalID  uint `json:"nationalId"`
-	CandidateID uint `json:"candidateId"`
-}
-
-type System struct {
-	Status bool `json:"status"`
+	ID          uint   `json:"id" gorm:"primary_key; not null; auto_increment"`
+	NationalID  string `json:"nationalId"`
+	CandidateID uint   `json:"candidateId"`
 }
 
 type InputCandidate struct {
@@ -26,6 +22,19 @@ type InputCandidate struct {
 	BioLink   string `json:"bioLink"`
 	ImageLink string `json:"imageLink"`
 	Policy    string `json:"policy"`
+}
+
+type InputCheckVote struct {
+	NationalID string `json:"nationalId"`
+}
+
+type InputVote struct {
+	NationalID  string `json:"nationalId"`
+	CandidateID uint   `json:"candidateId"`
+}
+
+type InputToggleElection struct {
+	Enable bool `json:"enable"`
 }
 
 type ResponseElectionResult struct {

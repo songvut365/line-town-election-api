@@ -23,7 +23,6 @@ func SetupDatabase() {
 	err = Database.AutoMigrate(
 		&model.Candidate{},
 		&model.Vote{},
-		&model.System{},
 	)
 	if err != nil {
 		panic("Failed to migrate database")
