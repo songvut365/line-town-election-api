@@ -1,39 +1,101 @@
 package handler
 
 import (
+	"fmt"
+	"line-town-election-api/database"
 	"line-town-election-api/model"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-// POST Toggle Election
+var ElectionStatus bool // Election Status injected from main
+
 func ToggleElection(c *fiber.Ctx) error {
-	//Success
+	// Parser
+	var input model.InputToggleElection
+
+	err := c.BodyParser(&input)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Cannot parser body",
+		})
+	}
+
+	// Toggle
+	ElectionStatus = input.Enable
+
+	// Success
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"status": "ok",
-		"enable": true,
+		"enable": ElectionStatus,
 	})
 }
 
-// Get Election Count
 func GetElectionCount(c *fiber.Ctx) error {
+	db := database.Database
+
+	// Find id and vouted count
 	electionCounts := []model.ResponseElectionCount{}
 
-	//Success
+	err := db.Model(&model.Candidate{}).Select("id", "voted_count").Find(&electionCounts).Error
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Cannot find election count",
+		})
+	}
+
+	// Success
 	return c.Status(http.StatusOK).JSON(electionCounts)
 }
 
-// GET Election Result
 func GetElectionResult(c *fiber.Ctx) error {
+	db := database.Database
+
+	// Find all candidate
+	var candidates []model.Candidate
+
+	err := db.Find(&candidates).Error
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Cannot find candidates",
+		})
+	}
+
+	// Get votes amount
+	var votedAll int64
+
+	db.Model(&model.Vote{}).Count(&votedAll)
+
+	// Calculate Percentage
 	electionResults := []model.ResponseElectionResult{}
 
-	//Success
+	for _, candidate := range candidates {
+		total := float64(candidate.VotedCount) / float64(votedAll)
+		percentage := fmt.Sprintf("%.2f", total*100) + "%" //convert to string
+
+		result := model.ResponseElectionResult{
+			ID:         candidate.ID,
+			Name:       candidate.Name,
+			DOB:        candidate.DOB,
+			BioLink:    candidate.BioLink,
+			ImageLink:  candidate.ImageLink,
+			Policy:     candidate.Policy,
+			VotedCount: candidate.VotedCount,
+			Percentage: percentage,
+		}
+
+		electionResults = append(electionResults, result)
+	}
+
+	// Success
 	return c.Status(http.StatusOK).JSON(electionResults)
 }
 
-// GET Exported Result (download)
 func GetExportResult(c *fiber.Ctx) error {
-	//Success
+	// Success
 	return c.Download("./public/export/result.csv", "result.csv")
 }
