@@ -9,17 +9,18 @@ import (
 )
 
 //Instance
-var DB *gorm.DB
+var Database *gorm.DB
 
 func SetupDatabase() {
 	//Open Database
-	db, err := gorm.Open(sqlite.Open("./database/election.db"), &gorm.Config{})
+	var err error
+	Database, err = gorm.Open(sqlite.Open("./database/election.db"), &gorm.Config{})
 	if err != nil {
 		panic("Failed to conenct database")
 	}
 
 	//Auto Migration
-	err = db.AutoMigrate(
+	err = Database.AutoMigrate(
 		&model.Candidate{},
 		&model.Vote{},
 		&model.System{},

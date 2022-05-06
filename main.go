@@ -18,7 +18,7 @@ func main() {
 	app.Use(recover.New())
 
 	//Setup
-	router.SetupRouter(*app)
+	router.SetupRouter(app)
 	database.SetupDatabase()
 
 	//Run
