@@ -1,17 +1,26 @@
 package main
 
 import (
+	"line-town-election-api/database"
+	"line-town-election-api/router"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
 func main() {
 	app := fiber.New()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World")
-	})
+	//Middleware
+	app.Use(logger.New())
+	app.Use(recover.New())
 
-	log.Fatal(app.Listen(":3000"))
+	//Setup
+	router.SetupRouter(*app)
+	database.SetupDatabase()
+
+	//Run
+	log.Fatal(app.Listen(":8080"))
 }
