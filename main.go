@@ -2,6 +2,7 @@ package main
 
 import (
 	"line-town-election-api/database"
+	"line-town-election-api/handler"
 	"line-town-election-api/router"
 	"log"
 
@@ -9,6 +10,9 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 )
+
+// Global Variable
+var ElectionStatus = true
 
 func main() {
 	app := fiber.New()
@@ -20,6 +24,9 @@ func main() {
 	//Setup
 	router.SetupRouter(app)
 	database.SetupDatabase()
+
+	//
+	handler.ElectionStatus = ElectionStatus
 
 	//Run
 	log.Fatal(app.Listen(":8080"))
