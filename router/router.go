@@ -2,12 +2,13 @@ package router
 
 import (
 	"line-town-election-api/handler"
+	"line-town-election-api/middleware"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func SetupRouter(app fiber.Router) {
-	api := app.Group("/api")
+	api := app.Group("/api", middleware.Protected)
 
 	//Candidate Routes
 	api.Get("/candidates", handler.GetCandidates)
