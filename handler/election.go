@@ -13,6 +13,8 @@ import (
 
 var ElectionStatus bool // Election Status injected from main
 
+// POST Toggle Election
+// API to open or close election
 func ToggleElection(c *fiber.Ctx) error {
 	// Parser
 	var input model.InputToggleElection
@@ -35,6 +37,8 @@ func ToggleElection(c *fiber.Ctx) error {
 	})
 }
 
+// POST Election Count
+// API to get id and voted count of candidate
 func GetElectionCount(c *fiber.Ctx) error {
 	db := database.Database
 
@@ -53,6 +57,8 @@ func GetElectionCount(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(electionCounts)
 }
 
+// POST Election Result
+// API to get candidate and persentage
 func GetElectionResult(c *fiber.Ctx) error {
 	db := database.Database
 
@@ -97,6 +103,8 @@ func GetElectionResult(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(electionResults)
 }
 
+// GET Exported Result (download)
+// API to send csv file with national id and candidate id
 func GetExportResult(c *fiber.Ctx) error {
 	db := database.Database
 

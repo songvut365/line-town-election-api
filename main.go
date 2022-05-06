@@ -34,7 +34,7 @@ func main() {
 	handler.ElectionStatus = ElectionStatus
 
 	//Run
-	log.Fatal(app.Listen(os.Getenv("PORT")))
+	log.Fatal(app.Listen(":"+os.Getenv("PORT")))
 }
 
 func SetupEnv() {
