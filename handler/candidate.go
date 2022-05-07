@@ -184,6 +184,15 @@ func DeleteCandidate(c *fiber.Ctx) error {
 		})
 	}
 
+	// Delete votes of candidate id
+	err = db.Where("candidate_id = ?", candidateId).Delete(&model.Vote{}).Error
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Cannot delete vote of candidate",
+		})
+	}
+
 	// Success
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"status": "ok",
