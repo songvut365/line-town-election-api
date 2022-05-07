@@ -62,7 +62,7 @@ func CreateCandidate(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
-			"message": "Cannot parser body",
+			"message": "Invalid input",
 		})
 	}
 
@@ -112,7 +112,7 @@ func UpdateCandidate(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
-			"message": "Cannot parser body",
+			"message": "Invalid input",
 		})
 	}
 
