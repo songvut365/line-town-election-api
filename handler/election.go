@@ -23,7 +23,7 @@ func ToggleElection(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
-			"message": "Cannot parser body",
+			"message": "Invalid input",
 		})
 	}
 
@@ -57,7 +57,7 @@ func GetElectionCount(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(electionCounts)
 }
 
-// POST Election Result
+// GET Election Result
 // API to get candidate and persentage
 func GetElectionResult(c *fiber.Ctx) error {
 	db := database.Database
@@ -79,11 +79,17 @@ func GetElectionResult(c *fiber.Ctx) error {
 	db.Model(&model.Vote{}).Count(&votedAll)
 
 	// Calculate Percentage
+	var percentage string
 	electionResults := []model.ResponseElectionResult{}
 
 	for _, candidate := range candidates {
-		total := float64(*candidate.VotedCount) / float64(votedAll)
-		percentage := fmt.Sprintf("%.2f", total*100) + "%" //convert to string
+
+		if votedAll == 0 {
+			percentage = "0%"
+		} else {
+			total := float64(*candidate.VotedCount) / float64(votedAll)
+			percentage = fmt.Sprintf("%.2f", total*100) + "%" //convert to string
+		}
 
 		result := model.ResponseElectionResult{
 			ID:         candidate.ID,
