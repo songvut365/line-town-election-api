@@ -3,6 +3,7 @@ package handler
 import (
 	"line-town-election-api/database"
 	"line-town-election-api/model"
+	"line-town-election-api/validation"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
@@ -21,6 +22,16 @@ func CheckVouteStatus(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
 			"message": "Invalid input",
+		})
+	}
+
+	// Validation
+	errors := validation.ValidInput(input)
+	if errors != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Invalid input",
+			"error":   errors,
 		})
 	}
 
@@ -53,6 +64,16 @@ func Vote(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
 			"message": "Invalid input",
+		})
+	}
+
+	// Validation
+	errors := validation.ValidInput(input)
+	if errors != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Invalid input",
+			"error":   errors,
 		})
 	}
 

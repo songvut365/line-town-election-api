@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"line-town-election-api/database"
 	"line-town-election-api/model"
+	"line-town-election-api/validation"
 	"net/http"
 	"os"
 
@@ -24,6 +25,16 @@ func ToggleElection(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
 			"message": "Invalid input",
+		})
+	}
+
+	// Validation
+	errors := validation.ValidInput(input)
+	if errors != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Invalid input",
+			"error":   errors,
 		})
 	}
 
