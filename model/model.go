@@ -1,7 +1,7 @@
 package model
 
 type Candidate struct {
-	ID         uint   `json:"id" gorm:"primary_key; not null; auto_increment"`
+	ID         uint   `json:"id" gorm:"primary_key; not null; auto_increment" validate:"required"`
 	Name       string `json:"name" validate:"required,min=3,max=50"`
 	DOB        string `json:"dob" validate:"required,min=3,max=50"`
 	BioLink    string `json:"bioLink" validate:"required,min=5"`
