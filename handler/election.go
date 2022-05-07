@@ -182,7 +182,32 @@ func CandidateVoteStream(ws *websocket.Conn) {
 	for {
 		var now model.ResponseElectionCount
 
-		db.Model(&model.Candidate{}).Select("id", "voted_count").Where("id = ?", candidateId).Find(&now)
+		db.Model(&model.LogVote{}).Select("id", "voted_count").Where("id = ?", candidateId).Order("created_at desc").First(&now)
+
+		// Check voted count has changed
+		if now.VotedCount != before.VotedCount {
+			err := ws.WriteJSON(now)
+			if err != nil {
+				break
+			}
+
+			before = now
+		}
+	}
+}
+
+// Real-time Vote Stream
+// Websocket stream for real-time vote count
+func CandidatesVoteStream(ws *websocket.Conn) {
+	db := database.Database
+
+	// Variable for before query candidate
+	var before model.ResponseElectionCount
+
+	for {
+		var now model.ResponseElectionCount
+
+		db.Model(&model.LogVote{}).Select("id", "voted_count").Order("created_at desc").First(&now)
 
 		// Check voted count has changed
 		if now.VotedCount != before.VotedCount {

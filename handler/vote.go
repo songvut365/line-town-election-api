@@ -5,6 +5,7 @@ import (
 	"line-town-election-api/model"
 	"line-town-election-api/validation"
 	"net/http"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -132,9 +133,16 @@ func Vote(c *fiber.Ctx) error {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"status":  "error",
 			"message": "Cannot update vote count",
-			"error":   err.Error,
 		})
 	}
+
+	//
+	var logVote model.LogVote
+	logVote.ID = candidate.ID
+	logVote.VotedCount = uint(voteCount)
+	logVote.CreatedAt = time.Now()
+
+	db.Create(&logVote)
 
 	// Success
 	return c.Status(http.StatusOK).JSON(fiber.Map{

@@ -36,5 +36,6 @@ func SetupRouter(app fiber.Router) {
 		return fiber.ErrUpgradeRequired
 	})
 
+	ws.Get("/candidates", websocket.New(handler.CandidatesVoteStream))
 	ws.Get("/candidates/:candidateId", websocket.New(handler.CandidateVoteStream))
 }
