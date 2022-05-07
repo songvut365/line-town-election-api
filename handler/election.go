@@ -10,6 +10,7 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/websocket/v2"
 )
 
 var ElectionStatus bool // Election Status injected from main
@@ -166,4 +167,31 @@ func GetExportResult(c *fiber.Ctx) error {
 
 	// Success
 	return c.Download("./public/export/result.csv", "result.csv")
+}
+
+// Real-time Vote Stream
+// Websocket stream for real-time vote count
+func CandidateVoteStream(ws *websocket.Conn) {
+	db := database.Database
+
+	candidateId := ws.Params("candidateId")
+
+	// Variable for before query candidate
+	var before model.ResponseElectionCount
+
+	for {
+		var now model.ResponseElectionCount
+
+		db.Model(&model.Candidate{}).Select("id", "voted_count").Where("id = ?", candidateId).Find(&now)
+
+		// Check voted count has changed
+		if now.VotedCount != before.VotedCount {
+			err := ws.WriteJSON(now)
+			if err != nil {
+				break
+			}
+
+			before = now
+		}
+	}
 }
