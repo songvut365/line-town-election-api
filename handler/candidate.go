@@ -42,7 +42,7 @@ func GetCandidate(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
-			"message": "Cannot get candidate",
+			"message": "Candidate not found",
 		})
 	}
 
@@ -116,7 +116,15 @@ func UpdateCandidate(c *fiber.Ctx) error {
 		})
 	}
 
-	// Find exist candidate by name
+	// Voted coutn can't update
+	if input.VotedCount != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Voted count cannot update",
+		})
+	}
+
+	// Find exist candidate by id
 	var candidate model.Candidate
 
 	err = db.Where("id = ?", candidateId).First(&candidate).Error
@@ -130,12 +138,22 @@ func UpdateCandidate(c *fiber.Ctx) error {
 	// Update Candidate
 	err = db.Model(&candidate).Updates(&input).Error
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"status":  "error",
 			"message": "Cannot update candidate",
 		})
 	}
 
+	// Update candidate id of votes
+	err = db.Model(&model.Vote{}).Where("candidate_id = ?", candidateId).Update("candidate_id", candidate.ID).Error
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Cannot update candidate id in votes",
+		})
+	}
+
+	// Success
 	return c.Status(http.StatusOK).JSON(candidate)
 }
 

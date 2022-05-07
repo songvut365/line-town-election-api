@@ -7,7 +7,7 @@ type Candidate struct {
 	BioLink    string `json:"bioLink"`
 	ImageLink  string `json:"imageLink"`
 	Policy     string `json:"policy"`
-	VotedCount uint   `json:"votedCount" gorm:"default:0"`
+	VotedCount *uint  `json:"votedCount" gorm:"default:0"`
 }
 
 type Vote struct {

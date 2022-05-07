@@ -82,7 +82,7 @@ func GetElectionResult(c *fiber.Ctx) error {
 	electionResults := []model.ResponseElectionResult{}
 
 	for _, candidate := range candidates {
-		total := float64(candidate.VotedCount) / float64(votedAll)
+		total := float64(*candidate.VotedCount) / float64(votedAll)
 		percentage := fmt.Sprintf("%.2f", total*100) + "%" //convert to string
 
 		result := model.ResponseElectionResult{
@@ -92,7 +92,7 @@ func GetElectionResult(c *fiber.Ctx) error {
 			BioLink:    candidate.BioLink,
 			ImageLink:  candidate.ImageLink,
 			Policy:     candidate.Policy,
-			VotedCount: candidate.VotedCount,
+			VotedCount: *candidate.VotedCount,
 			Percentage: percentage,
 		}
 
