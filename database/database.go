@@ -1,8 +1,8 @@
 package database
 
 import (
-	"fmt"
 	"line-town-election-api/model"
+	"log"
 	"os"
 
 	"gorm.io/driver/sqlite"
@@ -31,5 +31,5 @@ func SetupDatabase() {
 	}
 
 	//Success
-	fmt.Println("Database Migrated")
+	log.Println("Database Migrated")
 }
