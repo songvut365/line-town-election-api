@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -13,9 +14,18 @@ import (
 var Database *gorm.DB
 
 func SetupDatabase() {
-	//Open Database
+	// Switch MySQL and SQLite3
+	databaseType := os.Getenv("DATABASE_TYPE")
 	var err error
-	Database, err = gorm.Open(sqlite.Open(os.Getenv("DATABASE")), &gorm.Config{})
+
+	//Open Database
+	switch databaseType {
+	case "MySQL":
+		Database, err = gorm.Open(mysql.Open(os.Getenv("MYSQL_URI")), &gorm.Config{})
+	case "SQLite":
+		Database, err = gorm.Open(sqlite.Open(os.Getenv("SQLITE_URI")), &gorm.Config{})
+	}
+
 	if err != nil {
 		panic("Failed to conenct database")
 	}
