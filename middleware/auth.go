@@ -8,8 +8,11 @@ import (
 )
 
 func compareToken(authorization string) bool {
-	bearer := "Bearer "
-	return authorization == bearer+os.Getenv("EASY_TOKEN")
+	// Set bearer and token
+	bearer := os.Getenv("BEARER")
+	token := os.Getenv("EASY_TOKEN")
+
+	return authorization == bearer+" "+token
 }
 
 func Protected(c *fiber.Ctx) error {
