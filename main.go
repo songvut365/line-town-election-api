@@ -11,6 +11,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/template/html"
 	"github.com/joho/godotenv"
 )
 
@@ -18,7 +19,9 @@ import (
 var ElectionStatus = true
 
 func main() {
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		Views: html.New("./template", ".html"),
+	})
 
 	//Middleware
 	app.Use(logger.New())
@@ -34,7 +37,7 @@ func main() {
 	handler.ElectionStatus = ElectionStatus
 
 	//Run
-	log.Fatal(app.Listen(":"+os.Getenv("PORT")))
+	log.Fatal(app.Listen(":" + os.Getenv("PORT")))
 }
 
 func SetupEnv() {

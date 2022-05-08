@@ -38,4 +38,7 @@ func SetupRouter(app fiber.Router) {
 
 	ws.Get("/candidates", websocket.New(handler.CandidatesVoteStream))
 	ws.Get("/candidates/:candidateId", websocket.New(handler.CandidateVoteStream))
+
+	// Template
+	app.Get("/chart", handler.GetTopTenChart)
 }

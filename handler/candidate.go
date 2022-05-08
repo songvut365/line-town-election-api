@@ -5,6 +5,7 @@ import (
 	"line-town-election-api/model"
 	"line-town-election-api/validation"
 	"net/http"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -14,10 +15,22 @@ import (
 func GetCandidates(c *fiber.Ctx) error {
 	db := database.Database
 
+	// Query
+	name := c.Query("name")
+	limit, err := strconv.Atoi(c.Query("limit"))
+	if err != nil {
+		limit = 0
+	}
+
 	// Find candidates
 	candidates := []model.Candidate{}
 
-	err := db.Find(&candidates).Error
+	if name != "" {
+		err = db.Where("name = ?", name).Limit(limit).Find(&candidates).Error // Query by name
+	} else {
+		err = db.Limit(limit).Find(&candidates).Error // Without query
+	}
+
 	if err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",

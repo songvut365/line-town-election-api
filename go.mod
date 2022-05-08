@@ -6,6 +6,7 @@ require (
 	github.com/go-playground/validator/v10 v10.11.0
 	github.com/gobeam/stringy v0.0.5
 	github.com/gofiber/fiber/v2 v2.33.0
+	github.com/gofiber/template v1.6.27
 	github.com/gofiber/websocket/v2 v2.0.21
 	github.com/joho/godotenv v1.4.0
 	gorm.io/driver/sqlite v1.3.2
