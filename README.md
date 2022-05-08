@@ -17,14 +17,16 @@
 - `CSV_FILE=./public/export/result.csv` path of csv file for read
 - `CSV_FILE_SEND=/public/export/result.csv` path of csv file for send
 
-### How to run local
+## How to run
+
+### Local
 
 ```
 $ go mod download
 $ go run main.go
 ```
 
-### Run with docker
+### Docker
 
 ```
 $ docker build -t election-api .
