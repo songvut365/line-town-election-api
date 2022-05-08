@@ -4,7 +4,8 @@
 
 - `Golang and Fiber` Good structure, Good performance
 - `SQLite3` Lightweight, No installation just a one file and Easy for run on local
-- `GORM` Easy CRUD, Auto migration and Connecting to database
+- `MySQL` Flexiblem, Popular and Good for database server
+- `GORM` Easy CRUD, Auto migration, Connecting and Switching to database
 
 ## Setup
 
@@ -13,24 +14,25 @@
 - `PORT=8080` port for run server
 - `EASY_TOKEN=xxxx` token for authorization bearer
 - `BEARER=Bearer` bearer for authorization bearer
-- `DATABASE=./database/election.db` path of database file
+- `DATABASE_TYPE=SQLite` type of database
+- `SQLITE_URI=./database/election.db` path of sqlite file
+- `MYSQL_URI=root:1234@tcp(localhost:3306)/line-town-election?charset=utf8mb4&parseTime=True&loc=Local` uri of mysql server
 - `CSV_FILE=./public/export/result.csv` path of csv file for read
 - `CSV_FILE_SEND=./public/export/result.csv` path of csv file for send
 
 ## How to run
 
-### Local
+### Option 1 - Run with SQLite
 
 ```
 $ go mod download
 $ go run main.go
 ```
 
-### Docker
+### Option 2 - Run by docker-compose with MySQL
 
 ```
-$ docker build -t election-api .
-$ docker run -d -p 8080:8080 --name election-api-01 --env-file .\.env.docker election-api
+$ docker-compose up -d
 ```
 
 ### Example with cURL: (Get Candidates)
@@ -78,6 +80,6 @@ $ curl --location --request GET 'http://localhost:8080/api/candidates' \
 
 - [Fiber](http://gofiber.io/)
 - [Sqlite3](https://www.sqlite.org/index.html)
+- [MySQL](https://www.mysql.com/)
 - [Gorm](https://gorm.io/)
 - [Testify](https://github.com/stretchr/testify)
-- [Chart.js](https://www.chartjs.org/)
