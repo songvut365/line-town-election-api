@@ -1,6 +1,7 @@
 version: '3'
 services:
   go:
+    container_name: GoFiber
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,8 +12,14 @@ services:
       - .:/app
     ports:
       - 8080:8080
-    env_file:
-      - ./.env.docker
+    environment:
+      PORT: 8080
+      EASY_TOKEN: xxxx
+      BEARER: Bearer
+      CSV_FILE: ./public/export/result.csv
+      CSV_FILE_SEND: ./public/export/result.csv
+      DATABASE_TYPE: MySQL
+      MYSQL_URI: songvut:1234@tcp(DockerMySQL:3306)/line-town-election?charset=utf8mb4&parseTime=True&loc=Local
     depends_on:
       - "db"
 
@@ -24,7 +31,7 @@ services:
       MYSQL_DATABASE: line-town-election
       MYSQL_USER: songvut
       MYSQL_PASSWORD: 1234
-      TZ: 'Asia/Tokyo'
+      TZ: 'Asia/Bangkok'
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
       - db-data:/var/lib/mysql
