@@ -15,7 +15,7 @@
 - `BEARER=Bearer` bearer for authorization bearer
 - `DATABASE=./database/election.db` path of database file
 - `CSV_FILE=./public/export/result.csv` path of csv file for read
-- `CSV_FILE_SEND=/public/export/result.csv` path of csv file for send
+- `CSV_FILE_SEND=./public/export/result.csv` path of csv file for send
 
 ## How to run
 
@@ -30,7 +30,7 @@ $ go run main.go
 
 ```
 $ docker build -t election-api .
-$ docker run -d -p 8080:8080 --name election-api-01 --env-file .\.env election-api
+$ docker run -d -p 8080:8080 --name election-api-01 --env-file .\.env.docker election-api
 ```
 
 ### Example with cURL: (Get Candidates)
