@@ -127,18 +127,12 @@ func GetExportResult(c *fiber.Ctx) error {
 	db := database.Database
 
 	// Get all votes
-	var votes []model.Vote
+	var votes = []model.Vote{}
 
-	err := db.Find(&votes).Error
-	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"status":  "error",
-			"message": "Cannot find votes",
-		})
-	}
+	db.Find(&votes)
 
 	// Create csv file
-	file, err := os.Create("./public/export/result.csv")
+	file, err := os.Create(os.Getenv("CSV_FILE"))
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"status":  "error",
@@ -147,7 +141,7 @@ func GetExportResult(c *fiber.Ctx) error {
 	}
 	defer file.Close()
 
-	// Write votes to csv file
+	// Create csv writer and title
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
@@ -156,17 +150,21 @@ func GetExportResult(c *fiber.Ctx) error {
 	title := []string{"Candidate id", "National id"}
 	data = append(data, title)
 
-	for _, vote := range votes {
-		candidateId := fmt.Sprintf("%v", vote.CandidateID)
-		nationalId := vote.NationalID
+	// Write votes to csv file
+	if len(votes) != 0 {
+		for _, vote := range votes {
+			candidateId := fmt.Sprintf("%v", vote.CandidateID)
+			nationalId := vote.NationalID
 
-		row := []string{candidateId, nationalId}
-		data = append(data, row)
+			row := []string{candidateId, nationalId}
+			data = append(data, row)
+		}
 	}
+
 	writer.WriteAll(data)
 
 	// Success
-	return c.Download("./public/export/result.csv", "result.csv")
+	return c.Download(os.Getenv("CSV_FILE_SEND"), "result.csv")
 }
 
 // Real-time Vote Stream
