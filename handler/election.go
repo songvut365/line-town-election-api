@@ -40,7 +40,7 @@ func ToggleElection(c *fiber.Ctx) error {
 	}
 
 	// Toggle
-	ElectionStatus = input.Enable
+	ElectionStatus = *input.Enable
 
 	// Success
 	return c.Status(http.StatusOK).JSON(fiber.Map{

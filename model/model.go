@@ -43,7 +43,7 @@ type InputVote struct {
 }
 
 type InputToggleElection struct {
-	Enable bool `json:"enable" validate:"required"`
+	Enable *bool `json:"enable" validate:"required"`
 }
 
 type ResponseElectionResult struct {
