@@ -4,7 +4,7 @@
 
 - `Golang and Fiber` Good structure, Good performance
 - `SQLite3` Lightweight, No installation just a one file and Easy for run on local
-- `MySQL` Flexiblem, Popular and Good for database server
+- `MySQL` Flexible, Popular and Good for database server
 - `GORM` Easy CRUD, Auto migration, Connecting and Switching to database
 
 ## Setup
@@ -24,24 +24,23 @@
 
 ### Option 1 - Run with SQLite
 
-```
+```cmd
 $ go mod download
 $ go run main.go
 ```
 
 ### Option 2 - Run with MySQL by docker-compose
 
-```
+```cmd
 $ docker-compose up -d
 ```
 
 ### Example with cURL: (Get Candidates)
 
-```
+```cmd
 $ curl --location --request GET 'http://localhost:8080/api/candidates' \
     --header 'Authorization: Bearer xxxx'
 ```
-
 
 ## API Details
 
