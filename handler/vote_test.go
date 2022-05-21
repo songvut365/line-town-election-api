@@ -8,9 +8,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCheckVouteStatus(t *testing.T) {
+func TestCheckVoteStatus(t *testing.T) {
 	app := SetUp()
-	app.Post("/api/vote/status", CheckVouteStatus)
+	app.Post("/api/vote/status", CheckVoteStatus)
 
 	body := `{
 		"nationalId": "99900023123124"

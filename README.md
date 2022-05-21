@@ -1,6 +1,6 @@
 # LINE Town Election API
 
-## Why am I used this
+## Why am I using this
 
 - `Golang and Fiber` Good structure, Good performance
 - `SQLite3` Lightweight, No installation just a one file and Easy for run on local
@@ -29,7 +29,7 @@ $ go mod download
 $ go run main.go
 ```
 
-### Option 2 - Run by docker-compose with MySQL
+### Option 2 - Run with MySQL by docker-compose
 
 ```
 $ docker-compose up -d
@@ -74,4 +74,4 @@ $ curl --location --request GET 'http://localhost:8080/api/candidates' \
 
 - `/chart` Show Chart Top 10 Candidate
 - `/api/candidates?name=Songvut Nakrong&limit=5` Candidate query by name and limit
-- `/ws/candidate` Stream all candidates vote
+- `/ws/candidate` Stream all candidate vote

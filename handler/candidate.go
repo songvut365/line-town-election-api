@@ -150,7 +150,7 @@ func UpdateCandidate(c *fiber.Ctx) error {
 		})
 	}
 
-	// Voted coutn can't update
+	// Voted count can't update
 	if input.VotedCount != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",

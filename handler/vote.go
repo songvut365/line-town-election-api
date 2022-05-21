@@ -12,7 +12,7 @@ import (
 
 // POST Check Vote status
 // API to check vote status for voter
-func CheckVouteStatus(c *fiber.Ctx) error {
+func CheckVoteStatus(c *fiber.Ctx) error {
 	db := database.Database
 
 	// Parser

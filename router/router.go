@@ -19,7 +19,7 @@ func SetupRouter(app fiber.Router) {
 	api.Delete("/candidates/:candidateId", handler.DeleteCandidate)
 
 	// Vote Routes
-	api.Post("/vote/status", handler.CheckVouteStatus)
+	api.Post("/vote/status", handler.CheckVoteStatus)
 	api.Post("/vote", handler.Vote)
 
 	// Election Routes

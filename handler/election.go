@@ -54,7 +54,7 @@ func ToggleElection(c *fiber.Ctx) error {
 func GetElectionCount(c *fiber.Ctx) error {
 	db := database.Database
 
-	// Find id and vouted count
+	// Find id and voted count
 	electionCounts := []model.ResponseElectionCount{}
 
 	err := db.Model(&model.Candidate{}).Select("id", "voted_count").Find(&electionCounts).Error
@@ -70,7 +70,7 @@ func GetElectionCount(c *fiber.Ctx) error {
 }
 
 // GET Election Result
-// API to get candidate and persentage
+// API to get candidate and percentage
 func GetElectionResult(c *fiber.Ctx) error {
 	db := database.Database
 

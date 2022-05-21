@@ -27,7 +27,7 @@ func SetupDatabase() {
 	}
 
 	if err != nil {
-		panic("Failed to conenct database")
+		panic("Failed to connect database")
 	}
 
 	//Auto Migration

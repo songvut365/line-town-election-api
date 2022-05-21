@@ -33,7 +33,7 @@ func main() {
 	router.SetupRouter(app)
 	database.SetupDatabase()
 
-	//Inject gloabal variable
+	//Inject global variable
 	handler.ElectionStatus = ElectionStatus
 
 	//Run
